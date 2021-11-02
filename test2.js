@@ -102,14 +102,14 @@ async function Structuralsimilarity(imgfile,imgfileList){
     console.log( img1)
     var  imgfile2='./img/'+imgfileList[0].img
     console.log(load)
-    var img3 = await makeBigImg(img1,img2);
+    var img3 = await Imagezoom(img1,img2);
 
     // var ssim = SSIM.compare(img3, img2);
     // console.log(ssim)
     imgfileList.forEach( async (imgpath)=>{
         console.log('./img/'+imgpath.img)
         var  img2 = await loadImage('./img/'+imgpath.img);
-        var img2_ = await makeBigImg(img2,img2)
+        var img2_ = await Imagezoom(img2,img2)
         // console.log(img3, img2)
         var ssim = SSIM.compare(img3, img2_);
         console.log(ssim,imgpath)
@@ -117,7 +117,7 @@ async function Structuralsimilarity(imgfile,imgfileList){
 
 }
 
-async function makeBigImg(img,imgtarget){
+async function Imagezoom(img,imgtarget){
 
     var num = Math.floor(6000/img.naturalWidth )
     console.log('放大',num)
