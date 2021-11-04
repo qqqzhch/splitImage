@@ -69,7 +69,11 @@ function handleFile(file) {
     var reader = new FileReader();
     reader.onload = function (event) {
         source = event.target.result;
-        util.$('preview').innerHTML = '<img src="' + source + '" />';
+        
+        makeImgBig(source,function(src){
+            util.$('preview').innerHTML = '<img src="' + src + '" />';
+
+        })
         handlePiece(source);
     };
     reader.readAsDataURL(file);
@@ -499,9 +503,37 @@ function addImg(){
         callBack(ctx) 
 
     }
+
     
     
+}
+
+function makeImgBig(url,callBack){
+    var img = new Image();  
     
+    img.crossOrigin="anonymous";
+
+    img.src=url;  
+
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
     
-    
+    img.onload= function(){
+        console.log('dd');
+
+        var num = Math.floor(5000/img.naturalWidth);
+        canvas.width = img.naturalWidth*num;
+        canvas.height = img.naturalHeight*num;
+
+        ctx.drawImage(
+            img,
+            0,0, img.naturalWidth, img.naturalHeight,
+            0,0, 
+            canvas.width, canvas.height,
+            
+        );
+        var src = canvas.toDataURL();
+        callBack(src) 
+
+    }
 }
