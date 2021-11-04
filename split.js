@@ -133,7 +133,7 @@ function initFile() {
         img = img ? img[0] : null;
         handlePiece(img);
     }
-    addImg()
+    // addImg()
 }
 
 /**
@@ -196,36 +196,65 @@ function createPiece(img, row, column) {
     var src = '';
     var html = '';
 
-    canvas.width = wpiece;
-    canvas.height = hpiece;
-    const colorThief = new ColorThief();
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    
      arTimg=[]
-
-    for (var i = 0; i < row; i++) {
-        html += '<tr>';
+     ctx.drawImage(
+        img, 
+        0, 0, img.naturalWidth, img.naturalHeight
+    );
+    html += '<tr>';
+    ctx.beginPath();
+    for (var i = 1; i <= row; i++) {
         
-        for (var j = 0; j < column; j++) {
-            ctx.drawImage(
-                img, 
-                j * wpiece, i * hpiece, wpiece, hpiece, 
-                0, 0, wpiece, hpiece
-            );
+        
+        for (var j = 1; j <= column; j++) {
+            // ctx.drawImage(
+            //     img, 
+            //     j * wpiece, i * hpiece, wpiece, hpiece, 
+            //     0, 0, wpiece, hpiece
+            // );
 
-            src = canvas.toDataURL();
-            html += '<td><img src="' + src + '" /></td>';
-            var imgColor = colorThief.getColor(canvas);
-            // console.log(imgColor)
-            arTimg.push({
-                i,
-                j,
-                imgColor:imgColor
-            })
+            ctx.moveTo((i-1)* hpiece,j * wpiece);
+            ctx.lineTo( hpiece*i, j * wpiece);
 
+            ctx.moveTo(hpiece*i,(j-1) * wpiece);
+            ctx.lineTo(hpiece*i, j * wpiece);
+            
         }
-        html += '</tr>';
+          
     }
+
+    ctx.closePath();
+    ctx.stroke();
+
+    for (var i = 1; i <= row; i++) {
+        
+        
+        for (var j = 1; j <= column; j++) {
+            // ctx.drawImage(
+            //     img, 
+            //     j * wpiece, i * hpiece, wpiece, hpiece, 
+            //     0, 0, wpiece, hpiece
+            // );
+
+                  
+        }
+          
+    }
+
+
+
+
+    src = canvas.toDataURL();
+    html += '<td><img id="myimg" src="' + src + '" /></td>';
+
+    html += '</tr>';
     html = '<table>' + html + '</table>';
     console.log(arTimg)
+
+    
     return html;
 }
 
@@ -237,28 +266,31 @@ window.onload = initFile;
 function Calculatecolor(){
     console.log('Calculatecolor')
     const colorThief = new ColorThief();
-    var img=document.querySelector("#artimg")
+    var img=document.querySelector("#myimg")
     // img.crossOrigin = "Anonymous";
     
-    var imgColor = colorThief.getColor(img);
-    console.log(imgColor)
+    // var imgColor = colorThief.getColor(img);
+    // console.log(imgColor)
     var rowVal =  util.$('row').value;
-    var columnVal =  util.$('column').value;
+    var columnVal =  util. $('column').value;
 
-     arTimg.forEach((item)=>{
-       var minimg = findMinImg(item.imgColor)
-       item.minimg = minimg;
-       console.log(item)
+    createImg2(img, rowVal, columnVal)
+    return 
+
+    //  arTimg.forEach((item)=>{
+    //    var minimg = findMinImg(item.imgColor)
+    //    item.minimg = minimg;
+    //    console.log(item)
 
 
-    })
-    var rsult = createImg(yangbenimg,arTimg, rowVal, columnVal);
-    console.log(rsult)
-    var imglist =  document.querySelector('#imglist');
-    var imgR=document.createElement("img");
-        imgR.src=rsult;
+    // })
+    // var rsult = createImg(yangbenimg,arTimg, rowVal, columnVal);
+    // console.log(rsult)
+    // var imglist =  document.querySelector('#imglist');
+    // var imgR=document.createElement("img");
+    //     imgR.src=rsult;
         
-        imglist.append(imgR)
+    //     imglist.append(imgR)
 }
 
 function findMinImg(imgColor){
@@ -349,4 +381,113 @@ function addImg(){
 
     })
 
+}
+
+
+/**
+ * 生成图片碎片
+ * 
+ * @param {Image} img 
+ * @param {number=} row 分割宫格的行数
+ * @param {number=} column 分割宫格的列数
+ */
+ function createImg2(img, row, column) {
+    row = util.val(row);
+    column = util.val(column);
+
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var wpiece = Math.floor(img.naturalWidth / column);
+    var hpiece = Math.floor(img.naturalHeight / row);
+
+    var src = '';
+    var html = '';
+
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    
+     
+    html += '<tr>';
+    
+    
+
+    var settimeid;
+    var imgList=[13000000,13000001,13000002,13000003,13000004,13000005,13000006,13000007,13000008,13000009,13000010,13000011,13000012,13000013,13000014,13000015,13000016,13000017,13000018,13000019,13000020,13000021,13000022,13000023,13000024,13000025,13000026,13000027,13000028,13000029,13000030,13000031,13000032,13000033,13000034,13000035,13000036,13000037,13000038,13000039,13000040,13000041,13000042,13000043,13000044,13000045,13000046,13000047,13000048,13000049,13000050,13000051,13000052,13000053,13000054,13000055,13000056,13000057,13000058,13000059,13000060,13000061,13000062,13000063,13000064,13000065,13000066,13000067,13000068,13000069,13000070,13000071,13000072,13000073,13000074,13000075,13000076,13000077,13000078,13000079,13000080,13000081,13000082,13000083,13000084,13000085,13000086,13000087,13000088,13000089,13000090,13000091,13000092,13000093,13000094,13000095,13000096,13000097,13000098,13000099]
+    var imgs=imgList;
+
+    for (var i = 0; i < row; i++) {
+        
+        
+        for (var j = 0; j < column; j++) {
+            // ctx.drawImage(
+            //     img, 
+            //     j * wpiece, i * hpiece, wpiece, hpiece, 
+            //     0, 0, wpiece, hpiece
+            // );
+            
+            var nowimg = imgs.shift();
+            if(nowimg==undefined){
+                imgs=imgList;
+                nowimg = imgs.shift();
+            }
+        
+            loadImg(i,j,ctx,wpiece, hpiece,nowimg,function(){
+
+                // var src = canvas.toDataURL();
+                //     var  html = '<img src="' + src + '" />';
+                //     util.$('result').innerHTML=html; 
+                if(settimeid){
+                    clearTimeout(settimeid)
+                }
+                settimeid=setTimeout(()=>{
+                    ctx.globalAlpha = 0.7;
+
+                    var img22 = document.querySelector('#preview>img')
+                    ctx.drawImage(
+                        img22, 
+                         img22.width, img22.height, 
+                        
+                    );
+
+                    var src = canvas.toDataURL();
+                    var  html = '<img src="' + src + '" />';
+                    util.$('result').innerHTML=html;  
+
+                },5*1000)
+                
+
+            })
+
+                  
+        }
+          
+    }
+
+}
+
+
+ function loadImg(i,j,ctx,wpiece,hpiece,nowimg,callBack){
+    var img = new Image();  
+    
+    img.crossOrigin="anonymous";
+
+    img.src=`https://www.artblocks.io/_next/image?url=https%3A%2F%2Fartblocks-mainnet.s3.amazonaws.com%2F${nowimg}.png&w=640&q=75`;  
+
+      
+    img.onload= function(){
+        console.log('dd');
+        ctx.drawImage(
+                img, 
+                0, 0, img.width, img.height, 
+                j * wpiece, i * hpiece, wpiece, hpiece
+            ); 
+        callBack(ctx) 
+
+    }
+    
+    
+    
+    
+    
 }

@@ -7,8 +7,8 @@ const random = require('random')
 const FastAverageColor = require('fast-average-color-node');
 var SSIM = require('image-ssim');
 
-var rowNum=4;
-var columnNum=4;
+var rowNum=80;
+var columnNum=80;
 
 var util = {
     cancel: function (event) {
@@ -35,7 +35,7 @@ function euclideandistance(a, b) {
     return sum
   }
 async function  main(){
-    var img_ =await loadImage('unnamed.png')
+    var img_ =await loadImage('unnamed_2.png')
     var img =await makeBigImg(img_)
     var arTimgList = await createPiece(img, rowNum, columnNum)
     // console.log(arTimgList);
@@ -103,7 +103,7 @@ async function createPiece(img, row, column) {
         
     }
     
-    console.log(arTimg)
+    // console.log(arTimg)
     return arTimg;
 }
 
@@ -137,25 +137,30 @@ async function Calculatecolor(arTimg,yangbenimg){
     for (let index = 0; index < arTimg.length; index++) {
         var item = arTimg[index];
         var minimg = await findMinImg(item.imgColor,imgcolor)
-        var besimilar = Structuralsimilarity(item,imgcolor);
+        console.log('图像',minimg,imgcolor)
+
+        var besimilar = await Structuralsimilarity(item,minimg);
+        console.log('besimilar',index,besimilar)
 
         var maxIndx =besimilar.length>0?besimilar.length-1:0;       
         var myindex = random.int((min = 0), (max = maxIndx))
 
-        item.minimg = minimg[myindex].img;
-        console.log(item)
+        item.minimg = besimilar[myindex].img;
+        
         
     }
 
-    return ;
+    
+
+    
     
 
 
 
     var rsult = await createImg(yangbenimg,arTimg, rowVal, columnVal);
-    console.log(rsult)
+    // console.log(rsult)
     var filepath = base64Img.imgSync(rsult, 'dest', 'demo');
-    console.log(filepath)
+    // console.log(filepath)
     // fs.writeFileSync(`./demo.png`, rsult, 'utf-8')
     
 }
@@ -186,7 +191,7 @@ async function findMinImg(imgColor,imgcolorlist){
     }
     minImg=minImg.sort(function(a, b){return a.num-b.num})
     minImg=minImg.slice(0,20)
-    console.log(minImg)
+    // console.log(minImg)
 
 
 
@@ -285,21 +290,14 @@ async function makeBigImg(img){
 
 
 async function Structuralsimilarity(imgfile,imgfileList){
+    console.log('Structuralsimilarity')
 
     var  imgoriginal = await loadImage(imgfile.src);
     var  imgscanning = await loadImage('./img/'+imgfileList[0].img);
 
     imgoriginal = await Imagezoom(imgoriginal,imgscanning);
 
-    // imgfileList.forEach( async (imgpath)=>{
-        
-    //     var  imgscanning_i = await loadImage('./img/'+imgpath.img);
-    //     var imgscanning_i_aj = await Imagezoom(imgscanning_i,imgoriginal)
-    //     // console.log(img3, img2)
-    //     var ssim = SSIM.compare(imgoriginal, imgscanning_i_aj);
-    //     console.log(ssim)
-    //     imgpath.ssim=ssim;
-    // })
+    
 
     for (let index = 0; index < imgfileList.length; index++) {
         const element = imgfileList[index];
@@ -309,10 +307,10 @@ async function Structuralsimilarity(imgfile,imgfileList){
         // console.log(img3, img2)
         var ssim = SSIM.compare(imgoriginal, imgscanning_i_aj);
         console.log(ssim)
-        element.ssim=ssim;
+        element.ssim=ssim.ssim;
     }
 
-    imgfileList.sort(function(a, b){return a.ssim-b.ssim})
+    imgfileList.sort(function(a, b){return b.ssim-a.ssim})
     imgfileList=imgfileList.slice(0,8)
     
     return imgfileList;
@@ -321,10 +319,12 @@ async function Structuralsimilarity(imgfile,imgfileList){
 }
 
 async function Imagezoom(img,imgtarget){
-   console.log(img,imgtarget)
+//    console.log(img,imgtarget)
     
-    var wpiece = imgtarget.naturalWidth ;
-    var hpiece = imgtarget.naturalHeight ;
+    // var wpiece = imgtarget.naturalWidth ;
+    // var hpiece = imgtarget.naturalHeight ;
+    var wpiece = 8 ;
+    var hpiece = 8 ;
     
     var src = '';
     
