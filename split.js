@@ -248,10 +248,9 @@ function createPiece(img, row, column) {
 
 
     src = canvas.toDataURL();
-    html += '<td><img id="myimg" src="' + src + '" /></td>';
+    html += '<img width="500" height="500" id="myimg" src="' + src + '" />';
 
-    html += '</tr>';
-    html = '<table>' + html + '</table>';
+    
     console.log(arTimg)
 
     
@@ -414,8 +413,20 @@ function addImg(){
 
     var settimeid;
     var imgList=[13000000,13000001,13000002,13000003,13000004,13000005,13000006,13000007,13000008,13000009,13000010,13000011,13000012,13000013,13000014,13000015,13000016,13000017,13000018,13000019,13000020,13000021,13000022,13000023,13000024,13000025,13000026,13000027,13000028,13000029,13000030,13000031,13000032,13000033,13000034,13000035,13000036,13000037,13000038,13000039,13000040,13000041,13000042,13000043,13000044,13000045,13000046,13000047,13000048,13000049,13000050,13000051,13000052,13000053,13000054,13000055,13000056,13000057,13000058,13000059,13000060,13000061,13000062,13000063,13000064,13000065,13000066,13000067,13000068,13000069,13000070,13000071,13000072,13000073,13000074,13000075,13000076,13000077,13000078,13000079,13000080,13000081,13000082,13000083,13000084,13000085,13000086,13000087,13000088,13000089,13000090,13000091,13000092,13000093,13000094,13000095,13000096,13000097,13000098,13000099]
-    var imgs=imgList;
-
+    
+    // var img22 = document.querySelector('#preview>img')
+    //                 ctx.drawImage(
+    //                     img22,
+    //                     0,0, img22.width, img22.height,
+    //                     0,0, 
+    //                      img22.width, img22.height, 
+                        
+    //                 );
+    // var src = canvas.toDataURL();
+    // var  html = '<img width="500" height="500" src="' + src + '" />';
+    // util.$('result').innerHTML=html;  
+    // return
+    var numindex=0
     for (var i = 0; i < row; i++) {
         
         
@@ -426,11 +437,12 @@ function addImg(){
             //     0, 0, wpiece, hpiece
             // );
             
-            var nowimg = imgs.shift();
-            if(nowimg==undefined){
-                imgs=imgList;
-                nowimg = imgs.shift();
+            var nowimg = imgList[numindex];
+            numindex++
+            if(numindex==imgList.length){
+                numindex=0;    
             }
+            
         
             loadImg(i,j,ctx,wpiece, hpiece,nowimg,function(){
 
@@ -441,17 +453,19 @@ function addImg(){
                     clearTimeout(settimeid)
                 }
                 settimeid=setTimeout(()=>{
-                    ctx.globalAlpha = 0.7;
+                    ctx.globalAlpha = 0.79;
 
                     var img22 = document.querySelector('#preview>img')
                     ctx.drawImage(
-                        img22, 
-                         img22.width, img22.height, 
+                        img22,
+                        0,0, img22.naturalWidth, img22.naturalHeight,
+                        0,0, 
+                        img22.naturalWidth, img22.naturalHeight,
                         
                     );
 
                     var src = canvas.toDataURL();
-                    var  html = '<img src="' + src + '" />';
+                    var  html = '<img width="500" height="500" src="' + src + '" />';
                     util.$('result').innerHTML=html;  
 
                 },5*1000)
