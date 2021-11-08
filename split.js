@@ -86,6 +86,7 @@ function handleFile(file) {
 function initFile() {
     var previewDiv = util.$('preview');
     var fileInput = util.$('imgFile');
+    var transparency = util.$('transparency');
     
     var row =  util.$('row');
     var column =  util.$('column');
@@ -130,6 +131,7 @@ function initFile() {
      */
     row.onchange = updateRowColumn;
     column.onchange = updateRowColumn;
+    transparency.onchange = updatetransparency
 
     function updateRowColumn() {
         var img = previewDiv.getElementsByTagName('img');
@@ -220,11 +222,13 @@ function createPiece(img, row, column) {
             //     0, 0, wpiece, hpiece
             // );
 
-            ctx.moveTo((i-1)* hpiece,j * wpiece);
-            ctx.lineTo( hpiece*i, j * wpiece);
+            ctx.moveTo((j-1)* wpiece,i * hpiece);
+            ctx.lineTo( wpiece*j, i * hpiece);
+            
 
-            ctx.moveTo(hpiece*i,(j-1) * wpiece);
-            ctx.lineTo(hpiece*i, j * wpiece);
+            ctx.moveTo(wpiece*j,(i-1) * hpiece);
+            ctx.lineTo(wpiece*j, i * hpiece);
+            
             
         }
           
@@ -387,6 +391,7 @@ function addImg(){
 }
 
 
+var Basictreatment;
 /**
  * 生成图片碎片
  * 
@@ -457,6 +462,10 @@ function addImg(){
                     clearTimeout(settimeid)
                 }
                 settimeid=setTimeout(()=>{
+                    ctx.save();
+                    Basictreatment = canvas.toDataURL();
+
+
                     ctx.globalAlpha = 0.79;
 
                     var img22 = document.querySelector('#preview>img')
@@ -536,4 +545,55 @@ function makeImgBig(url,callBack){
         callBack(src) 
 
     }
+}
+
+function updatetransparency(event){
+    console.log(event.target.value)
+    var num =parseFloat(event.target.value) ;
+    if(num>1){
+        num=1
+    }
+    else if(num<0){
+        num=0
+
+    }
+
+    
+    var img = new Image();  
+    
+    img.crossOrigin="anonymous";
+    img.src=Basictreatment
+    img.onload= function(){
+        
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+
+
+    ctx.drawImage(
+        img,
+        0,0, img.naturalWidth, img.naturalHeight,
+        0,0, 
+        img.naturalWidth, img.naturalHeight,
+        
+    ) 
+    var img22 = document.querySelector('#preview>img')
+    ctx.globalAlpha = num;
+    ctx.drawImage(
+        img22,
+        0,0, img22.naturalWidth, img22.naturalHeight,
+        0,0, 
+        img22.naturalWidth, img22.naturalHeight,
+        
+    ) 
+
+    var src = canvas.toDataURL();
+                    var  html = '<img width="500" height="500" src="' + src + '" />';
+                    util.$('result').innerHTML=html;  
+        
+
+    }
+
 }
